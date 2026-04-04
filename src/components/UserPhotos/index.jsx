@@ -1,23 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Card, CardMedia, CardContent, Divider, Box } from "@mui/material";
 import { useParams, Link } from "react-router-dom";
 
 import "./styles.css";
-import models from "../../modelData/models";
+import fetchModel from "../../lib/fetchModelData";
 
 function UserPhotos() {
   const { userId } = useParams();
-  const photos = models.photoOfUserModel(userId);
+  const [photos, setPhotos] = useState([]);
+
+  useEffect(() => {
+    fetchModel(`/photosOfUser/${userId}`)
+      .then((data) => setPhotos(data))
+      .catch((err) => console.error("Error fetching photos:", err));
+  }, [userId]);
 
   if (!photos || photos.length === 0) {
-    return <Typography variant="body1">No photos found for this user.</Typography>;
+    return <Typography variant="body1">Loading photos...</Typography>;
   }
 
   return (
     <Box>
       {photos.map((photo) => (
         <Card key={photo._id} sx={{ mb: 4 }}>
-          {/* Đường dẫn ảnh phụ thuộc vào thư mục public, mặc định với lab này là /images/ */}
           <CardMedia
             component="img"
             image={`/images/${photo.file_name}`}
@@ -39,7 +44,6 @@ function UserPhotos() {
               photo.comments.map((comment) => (
                 <Box key={comment._id} sx={{ mb: 2 }}>
                   <Typography variant="body2">
-                    {/* Link dẫn tới trang của người viết comment */}
                     <Link to={`/users/${comment.user._id}`} style={{ textDecoration: 'none', fontWeight: 'bold', color: '#1976d2' }}>
                       {comment.user.first_name} {comment.user.last_name}
                     </Link>

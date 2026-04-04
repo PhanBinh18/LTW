@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Button, Box } from "@mui/material";
 import { useParams, Link } from "react-router-dom";
 
 import "./styles.css";
-import models from "../../modelData/models";
+import fetchModel from "../../lib/fetchModelData";
 
 function UserDetail() {
   const { userId } = useParams();
-  const user = models.userModel(userId);
+  const [user, setUser] = useState(null);
 
-  // Nếu không tìm thấy user, trả về thông báo rỗng
+  useEffect(() => {
+    fetchModel(`/user/${userId}`)
+      .then((data) => setUser(data))
+      .catch((err) => console.error("Error fetching user:", err));
+  }, [userId]);
+
   if (!user) {
-    return <Typography variant="body1">User not found!</Typography>;
+    return <Typography variant="body1">Loading user details...</Typography>;
   }
 
   return (

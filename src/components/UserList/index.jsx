@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Divider,
   List,
   ListItem,
   ListItemText,
   ListItemButton,
+  Typography
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
 import "./styles.css";
-import models from "../../modelData/models";
+import fetchModel from "../../lib/fetchModelData";
 
 function UserList() {
-  const users = models.userListModel();
+  // Trạng thái ban đầu là một mảng rỗng
+  const [users, setUsers] = useState([]);
+
+  // useEffect gọi API 1 lần duy nhất khi component vừa render
+  useEffect(() => {
+    fetchModel("/user/list")
+      .then((data) => setUsers(data))
+      .catch((err) => console.error("Error fetching user list:", err));
+  }, []);
+
+  if (users.length === 0) {
+    return <Typography>Loading users...</Typography>;
+  }
 
   return (
     <div>
@@ -20,7 +33,6 @@ function UserList() {
         {users.map((item) => (
           <React.Fragment key={item._id}>
             <ListItem disablePadding>
-              {/* Sử dụng component Link của React Router để chuyển trang không cần reload */}
               <ListItemButton component={Link} to={`/users/${item._id}`}>
                 <ListItemText primary={`${item.first_name} ${item.last_name}`} />
               </ListItemButton>
