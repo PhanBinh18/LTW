@@ -4,40 +4,33 @@ import {
   List,
   ListItem,
   ListItemText,
-  Typography,
+  ListItemButton,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 
 import "./styles.css";
 import models from "../../modelData/models";
 
-/**
- * Define UserList, a React component of Project 4.
- */
-function UserList () {
-    const users = models.userListModel();
-    return (
-      <div>
-        <Typography variant="body1">
-          This is the user list, which takes up 3/12 of the window. You might
-          choose to use <a href="https://mui.com/components/lists/">Lists</a>{" "}
-          and <a href="https://mui.com/components/dividers/">Dividers</a> to
-          display your users like so:
-        </Typography>
-        <List component="nav">
-          {users.map((item) => (
-            <>
-              <ListItem>
-                      <ListItemText primary={item.first_name}/>
-              </ListItem>
-              <Divider />
-            </>
-          ))}
-        </List>
-        <Typography variant="body1">
-          The model comes in from models.userListModel()
-        </Typography>
-      </div>
-    );
+function UserList() {
+  const users = models.userListModel();
+
+  return (
+    <div>
+      <List component="nav">
+        {users.map((item) => (
+          <React.Fragment key={item._id}>
+            <ListItem disablePadding>
+              {/* Sử dụng component Link của React Router để chuyển trang không cần reload */}
+              <ListItemButton component={Link} to={`/users/${item._id}`}>
+                <ListItemText primary={`${item.first_name} ${item.last_name}`} />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+          </React.Fragment>
+        ))}
+      </List>
+    </div>
+  );
 }
 
 export default UserList;
