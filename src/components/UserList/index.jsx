@@ -1,41 +1,25 @@
 import React, { useState, useEffect } from "react";
-import {
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemButton,
-  Typography
-} from "@mui/material";
+import { Divider, List, ListItem, ListItemText, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-
-import "./styles.css";
 import fetchModel from "../../lib/fetchModelData";
 
 function UserList() {
-  // Trạng thái ban đầu là một mảng rỗng
   const [users, setUsers] = useState([]);
 
-  // useEffect gọi API 1 lần duy nhất khi component vừa render
   useEffect(() => {
-    fetchModel("/user/list")
-      .then((data) => setUsers(data))
-      .catch((err) => console.error("Error fetching user list:", err));
+    fetchModel("http://localhost:8081/user/list")
+      .then((response) => setUsers(response.data))
+      .catch((error) => console.log(error));
   }, []);
-
-  if (users.length === 0) {
-    return <Typography>Loading users...</Typography>;
-  }
 
   return (
     <div>
+      <Typography variant="h5">Users</Typography>
       <List component="nav">
-        {users.map((item) => (
-          <React.Fragment key={item._id}>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to={`/users/${item._id}`}>
-                <ListItemText primary={`${item.first_name} ${item.last_name}`} />
-              </ListItemButton>
+        {users.map((user) => (
+          <React.Fragment key={user._id}>
+            <ListItem button component={Link} to={`/users/${user._id}`}>
+              <ListItemText primary={`${user.first_name} ${user.last_name}`} />
             </ListItem>
             <Divider />
           </React.Fragment>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Button, Box } from "@mui/material";
-import { useParams, Link } from "react-router-dom";
-
-import "./styles.css";
+import { Typography, Button } from "@mui/material";
+import { Link, useParams } from "react-router-dom";
 import fetchModel from "../../lib/fetchModelData";
 
 function UserDetail() {
@@ -10,39 +8,23 @@ function UserDetail() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetchModel(`/user/${userId}`)
-      .then((data) => setUser(data))
-      .catch((err) => console.error("Error fetching user:", err));
+    fetchModel(`http://localhost:8081/user/${userId}`)
+      .then((response) => setUser(response.data))
+      .catch((error) => console.log(error));
   }, [userId]);
 
-  if (!user) {
-    return <Typography variant="body1">Loading user details...</Typography>;
-  }
+  if (!user) return <Typography>Loading...</Typography>;
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        {user.first_name} {user.last_name}
-      </Typography>
-      <Typography variant="body1" sx={{ mb: 1 }}>
-        <strong>Location:</strong> {user.location}
-      </Typography>
-      <Typography variant="body1" sx={{ mb: 1 }}>
-        <strong>Description:</strong> {user.description}
-      </Typography>
-      <Typography variant="body1" sx={{ mb: 3 }}>
-        <strong>Occupation:</strong> {user.occupation}
-      </Typography>
-
-      <Button
-        variant="contained"
-        color="primary"
-        component={Link}
-        to={`/photos/${user._id}`}
-      >
+    <div>
+      <Typography variant="h4">{user.first_name} {user.last_name}</Typography>
+      <Typography variant="body1">Location: {user.location}</Typography>
+      <Typography variant="body1">Description: {user.description}</Typography>
+      <Typography variant="body1">Occupation: {user.occupation}</Typography>
+      <Button variant="contained" component={Link} to={`/photos/${user._id}`}>
         View Photos
       </Button>
-    </Box>
+    </div>
   );
 }
 
