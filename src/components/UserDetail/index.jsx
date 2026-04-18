@@ -3,15 +3,20 @@ import { Typography, Button } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import fetchModel from "../../lib/fetchModelData";
 
-function UserDetail() {
+function UserDetail({ setTopBarContext }) {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetchModel(`http://localhost:8081/user/${userId}`)
-      .then((response) => setUser(response.data))
+    fetchModel(`/user/${userId}`)
+      .then((response) => {
+        setUser(response.data);
+        
+        // Gọi hàm để báo lên App.js cập nhật TopBar
+        setTopBarContext(`${response.data.first_name} ${response.data.last_name}`);
+      })
       .catch((error) => console.log(error));
-  }, [userId]);
+  }, [userId, setTopBarContext]);
 
   if (!user) return <Typography>Loading...</Typography>;
 

@@ -1,8 +1,8 @@
 import './App.css';
 
-import React from "react";
+import React, {useState} from "react";
 import { Grid, Typography, Paper } from "@mui/material";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 
 import TopBar from "./components/TopBar";
 import UserDetail from "./components/UserDetail";
@@ -10,12 +10,13 @@ import UserList from "./components/UserList";
 import UserPhotos from "./components/UserPhotos";
 
 const App = (props) => {
+  const [topBarContext, setTopBarContext] = useState("");
   return (
       <Router>
         <div>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TopBar />
+              <TopBar context={topBarContext}/>
             </Grid>
             <div className="main-topbar-buffer" />
             <Grid item sm={3}>
@@ -28,13 +29,14 @@ const App = (props) => {
                 <Routes>
                   <Route
                       path="/users/:userId"
-                      element = {<UserDetail />}
+                      element={<UserDetail setTopBarContext={setTopBarContext} />}
                   />
                   <Route
                       path="/photos/:userId"
-                      element = {<UserPhotos />}
+                      element={<UserPhotos setTopBarContext={setTopBarContext} />}
                   />
                   <Route path="/users" element={<UserList />} />
+                  <Route path="/" element={<Navigate to="/users" replace />} />
                 </Routes>
               </Paper>
             </Grid>

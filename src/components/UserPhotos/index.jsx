@@ -3,16 +3,24 @@ import { Typography, Card, CardHeader, CardMedia, CardContent } from "@mui/mater
 import { useParams, Link } from "react-router-dom";
 import fetchModel from "../../lib/fetchModelData";
 
-function UserPhotos() {
+function UserPhotos({ setTopBarContext }) {
   const { userId } = useParams();
   const [photos, setPhotos] = useState([]);
 
   useEffect(() => {
-    fetchModel(`http://localhost:8081/photosOfUser/${userId}`)
+    // 1. Fetch danh sách ảnh để hiển thị ở trang này
+    fetchModel(`/photosOfUser/${userId}`)
       .then((response) => setPhotos(response.data))
       .catch((error) => console.log(error));
-  }, [userId]);
 
+    // 2. Fetch thông tin User để lấy cái tên đưa lên TopBar
+    fetchModel(`/user/${userId}`)
+      .then((response) => {
+        setTopBarContext(`Photos of ${response.data.first_name} ${response.data.last_name}`);
+      })
+      .catch((error) => console.log(error));
+      
+  }, [userId, setTopBarContext]);
   if (photos.length === 0) return <Typography>Loading...</Typography>;
 
   return (
