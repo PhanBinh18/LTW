@@ -8,26 +8,31 @@ function UserPhotos({ setTopBarContext }) {
   const [photos, setPhotos] = useState([]);
 
   useEffect(() => {
-    // 1. Fetch danh sách ảnh để hiển thị ở trang này
-    fetchModel(`/photosOfUser/${userId}`)
-      .then((response) => setPhotos(response.data))
-      .catch((error) => console.log(error));
+    const loadData = async () => {
+      try {
+        const [userRes, photosRes] = await Promise.all ([
+          fetchModel(`/user/${userId}`),
+          fetchModel(`/photosOfUser/${userId}`)
+        ]);
+        
+        setPhotos(photosRes.data);
+        setTopBarContext(`Photos of ${userRes.data.first_name} ${userRes.data.last_name}`);
+      } catch (error) {
+        console.log(error);
+        throw (error);
+      }
+    }
 
-    // 2. Fetch thông tin User để lấy cái tên đưa lên TopBar
-    fetchModel(`/user/${userId}`)
-      .then((response) => {
-        setTopBarContext(`Photos of ${response.data.first_name} ${response.data.last_name}`);
-      })
-      .catch((error) => console.log(error));
-      
+    loadData();
   }, [userId, setTopBarContext]);
+
   if (photos.length === 0) return <Typography>Loading...</Typography>;
 
   return (
     <div>
       {photos.map((photo) => (
         <Card key={photo._id} style={{ marginBottom: "20px" }}>
-          <CardHeader title={`Photo created: ${photo.date_time}`} />
+          <CardHeader title={`Photo created: ${new Date(photo.date_time).toLocaleString()}`} />
           <CardMedia
             component="img"
             image={`/images/${photo.file_name}`}
@@ -43,7 +48,7 @@ function UserPhotos({ setTopBarContext }) {
                   : {comment.comment}
                 </Typography>
                 <Typography variant="caption" color="textSecondary">
-                  {comment.date_time}
+                  {new Date(comment.date_time).toLocaleString()}
                 </Typography>
               </div>
             ))}

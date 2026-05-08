@@ -7,7 +7,7 @@ function TopBar({ context }) {
     <AppBar className="topbar-appBar" position="absolute">
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Typography variant="h5" color="inherit">
-          Your Name
+          Phan Thanh Binh
         </Typography>
 
         <Typography variant="h6" color="inherit" fontWeight="regular">

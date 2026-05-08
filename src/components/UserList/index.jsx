@@ -7,9 +7,18 @@ function UserList() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetchModel("user/list")
-      .then((response) => setUsers(response.data))
-      .catch((error) => console.log(error));
+    const loadUsers = async () => {
+      try {
+        const response = await fetchModel(`user/list`);
+        setUsers(response.data);
+
+      } catch (error)
+      {
+        console.log(error)
+        throw error;
+      }
+    }
+    loadUsers();
   }, []);
 
   return (

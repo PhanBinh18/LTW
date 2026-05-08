@@ -8,14 +8,18 @@ function UserDetail({ setTopBarContext }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetchModel(`/user/${userId}`)
-      .then((response) => {
+    const loadData = async () => {
+      try {
+        const response = await fetchModel(`user/${userId}`);
         setUser(response.data);
-        
-        // Gọi hàm để báo lên App.js cập nhật TopBar
         setTopBarContext(`${response.data.first_name} ${response.data.last_name}`);
-      })
-      .catch((error) => console.log(error));
+      } catch (error){
+        console.log(error);
+        throw error;
+      }
+    }
+
+    loadData();
   }, [userId, setTopBarContext]);
 
   if (!user) return <Typography>Loading...</Typography>;
