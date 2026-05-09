@@ -36,10 +36,10 @@ function TopBar({ context, currentUser, setCurrentUser }) {
 
     try {
       // Dùng fetch thuần (không dùng fetchModel) để trình duyệt tự nhận diện FormData
-      const response = await fetch("http://localhost:8081/photos/new", {
+      const response = await fetch("https://y9c4tj-8081.csb.app/photos/new", {
         method: "POST",
         body: formData,
-        credentials: "include", 
+        credentials: "include",
         // LƯU Ý: Tuyệt đối không set "Content-Type" ở đây. Trình duyệt sẽ tự động thêm boundary cho multipart/form-data.
       });
 
@@ -48,13 +48,12 @@ function TopBar({ context, currentUser, setCurrentUser }) {
       }
 
       alert("Upload ảnh thành công!");
-      
+
       // Chuyển hướng người dùng thẳng về trang chứa ảnh của chính họ để xem tác phẩm
       navigate(`/photos/${currentUser._id}`);
-      
-      // Reset lại input file để có thể upload ảnh cùng tên ở lần sau
-      e.target.value = ""; 
 
+      // Reset lại input file để có thể upload ảnh cùng tên ở lần sau
+      e.target.value = "";
     } catch (error) {
       console.error("Upload error:", error);
       alert("Đã xảy ra lỗi khi tải ảnh lên.");
@@ -64,7 +63,6 @@ function TopBar({ context, currentUser, setCurrentUser }) {
   return (
     <AppBar className="topbar-appBar" position="absolute">
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        
         <Box display="flex" alignItems="center" gap={2}>
           <Typography variant="h5" color="inherit">
             Phan Thanh Binh
@@ -86,25 +84,33 @@ function TopBar({ context, currentUser, setCurrentUser }) {
                 hidden
                 onChange={handlePhotoUpload}
               />
-              
+
               {/* Nút Upload hiển thị cho người dùng */}
-              <Button variant="contained" color="success" onClick={handleUploadButtonClicked} size="small">
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleUploadButtonClicked}
+                size="small"
+              >
                 Upload Photo
               </Button>
 
               <Typography variant="subtitle1" fontWeight="bold">
                 Hi {currentUser.first_name}
               </Typography>
-              <Button variant="contained" color="secondary" onClick={handleLogout} size="small">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleLogout}
+                size="small"
+              >
                 Logout
               </Button>
             </Box>
           ) : (
-            <Typography variant="subtitle1"  color="white">
-            </Typography>
+            <Typography variant="subtitle1" color="white"></Typography>
           )}
         </Box>
-
       </Toolbar>
     </AppBar>
   );

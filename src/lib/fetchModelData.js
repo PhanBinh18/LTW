@@ -1,6 +1,7 @@
 async function fetchModel(url, method = "GET", bodyData = null) {
-  const cleanUrl = url.replace(/^\/+/, '');
-  const fullUrl = `http://localhost:8081/${cleanUrl}`;
+  const cleanUrl = url.replace(/^\/+/, "");
+  const backendUrl = "https://y9c4tj-8081.csb.app";
+  const fullUrl = `${backendUrl}/${cleanUrl}`;
 
   const options = {
     method: method,
@@ -19,7 +20,7 @@ async function fetchModel(url, method = "GET", bodyData = null) {
     const response = await fetch(fullUrl, options);
     if (!response.ok) {
       const errorText = await response.text(); // Đọc lỗi từ server gửi về
-      throw new Error(`API Error ${response.status}: ${errorText}`);    
+      throw new Error(`API Error ${response.status}: ${errorText}`);
     }
 
     const data = await response.json();
