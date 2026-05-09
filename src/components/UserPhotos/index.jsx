@@ -61,7 +61,7 @@ function UserPhotos({ setTopBarContext }) {
           <CardHeader title={`Photo created: ${new Date(photo.date_time).toLocaleString()}`} />
           <CardMedia
             component="img"
-            image={`/images/${photo.file_name}`}
+            image={`http://localhost:8081/images/${photo.file_name}`}
             alt="User photo"
           />
           <CardContent>
