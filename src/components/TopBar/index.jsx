@@ -100,8 +100,7 @@ function TopBar({ context, currentUser, setCurrentUser }) {
               </Button>
             </Box>
           ) : (
-            <Typography variant="subtitle1" fontWeight="bold" color="error">
-              Please Login
+            <Typography variant="subtitle1"  color="white">
             </Typography>
           )}
         </Box>

@@ -40,7 +40,7 @@ const App = (props) => {
                   {/* Route đăng nhập không bị chặn */}
                   <Route
                       path="/login-register"
-                      element={<LoginRegister setCurrentUser={setCurrentUser} />}
+                      element={<LoginRegister setCurrentUser={setCurrentUser} setTopBarContext={setTopBarContext} />}
                   />
                   
                   {/* Các route được bảo vệ bằng toán tử ba ngôi (Ternary Operator) */}
